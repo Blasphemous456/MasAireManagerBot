@@ -1,17 +1,17 @@
+require("dotenv").config();
+
 const express = require("express");
 const cors = require("cors");
 
-const citasRoutes = require("./routes/citas.routes");
+const conectarDB = require("./config/database");
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-app.use("/api/citas", citasRoutes);
+conectarDB();
 
-const PORT = 3000;
-
-app.listen(PORT, () => {
-    console.log("Servidor backend corriendo en puerto " + PORT);
+app.listen(3000, () => {
+    console.log("Servidor backend corriendo en puerto 3000");
 });

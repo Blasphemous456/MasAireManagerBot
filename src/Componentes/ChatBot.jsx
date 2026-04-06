@@ -11,8 +11,8 @@ export default function ChatBot() {
   const [Mensajes, setMensajes] = useState([
     { 
       sender: 'bot', 
-      text: '👋 ¡Hola! Te haré 3 preguntas. Selecciona una opción por cada una.',
-      titulo: '¿Qué deseas hacer?' // ← Nuevo: título para la barra superior
+      text: '👋 ¡Hola! Te haré 3 preguntas sobre tu instalación. Selecciona una opción por cada una.',
+      titulo: '¿Qué deseas hacer?' 
     },
     { 
       sender: 'bot', 

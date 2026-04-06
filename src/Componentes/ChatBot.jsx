@@ -18,7 +18,7 @@ export default function ChatBot() {
       sender: 'bot', 
       text: Preguntas[0].text, 
       options: Preguntas[0].options,
-      titulo: `Paso 1 de ${Preguntas.length}` // ← Nuevo
+      titulo: `Paso 1 de ${Preguntas.length}`
     }
   ]);
 
@@ -53,22 +53,36 @@ export default function ChatBot() {
     }
   };
 
-  // 3. Guardar en "base de datos" local
-  const GuardarBD = () => {
-    const BuscarLS = JSON.parse(localStorage.getItem('chatbot_respuestas') || '[]');
-    const NuevoDato = {
-      id: Date.now(),
-      answers: Respuestas,
-      createdAt: new Date().toLocaleString()
-    };
-    BuscarLS.push(NuevoDato);
-    localStorage.setItem('chatbot_respuestas', JSON.stringify(BuscarLS));
 
+  const GuardarBD = async () => {
+  const IdRandom = Math.floor(1000 + Math.random() * 9000);
+  
+  const NuevoDato = {
+    id: IdRandom,
+    answers: Respuestas
+  };
+
+  try {
+    const respuesta = await fetch('http://localhost:3001/respuestas', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(NuevoDato)
+    });
+
+    if (respuesta.ok) {
+      setMensajes(anterior => [...anterior, {
+        sender: 'bot',
+        text: `✅ Guardado con ID #${IdRandom}`
+      }]);
+    }
+  } catch (error) {
+    console.error('Error:', error);
     setMensajes(anterior => [...anterior, {
       sender: 'bot',
-      text: `💾 Respuestas guardadas correctamente.\n📋 Tus respuestas: ${JSON.stringify(Respuestas)}`
+      text: '❌ Error al guardar'
     }]);
-  };
+  }
+};
 
   return (
     <div className="chat-container">

@@ -1,29 +1,29 @@
 export const Preguntas = [
   {
     id: 1,
-    text: "Cual es el tamaño de la habitacion donde se instalara el aire acondicionado?",
+    text: "¿Cual es el tamaño de la habitación donde desea instalar el aire acondicionado?",
     options: [
-      { value: "a", label: "menos de 20 m²" },
-      { value: "b", label: "entre 20 y 40 m²" },
-      { value: "c", label: "más de 40 m²" }
+      { value: "a", label: "Menos de 20 m²" },
+      { value: "b", label: "Entre 20 y 40 m²" },
+      { value: "c", label: "Más de 40 m²" }
     ]
   },
   {
     id: 2,
-    text: "Que tipo de aire acondicionado prefieres?",
+    text: "¿Qué tipo de aire acondicionado prefiere?",
     options: [
       { value: "a", label: "Aire acondicionado de ventana" },
-      { value: "b", label: "Aire acondicionado tipo portatil" },
-      { value: "c", label: "Aire acondicionado tipo split" }
+      { value: "b", label: "Aire acondicionado tipo split" },
+      { value: "c", label: "Aire acondicionado portátil" }
     ]
   },
   {
     id: 3,
-    text: "hay alguna restriccion de instalacion como ventana o paredes?",
+    text: "¿Existe alguna restricción de instalación como ventanas o paredes específicas?",
     options: [
-      { value: "a", label: "si solo puedo instalarlo en una ventana especifica" },
-      { value: "b", label: "Si hay limitaciones en las paredes externas" },
-      { value: "c", label: "No hay restricciones de instalacion" }
+      { value: "a", label: "Si, solo puedo instalarlo en una ventana específica" },
+      { value: "b", label: "Si, hay limitaciones en las paredes externas" },
+      { value: "c", label: "No, no hay restricciones para la instalación" }
     ]
   }
 ];

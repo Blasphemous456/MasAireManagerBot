@@ -8,6 +8,15 @@ export default function ChatBot() {
   const [Terminado, setTerminado] = useState(false);
   const ColoresIconos = ['orange', 'dark-green', 'light-green', 'blue'];
 
+  // Estados para los datos del cliente
+  const [nombreCliente, setNombreCliente] = useState("");
+  const [tipoDocumento, setTipoDocumento] = useState("");
+  const [documento, setDocumento] = useState("");
+  const [telefono, setTelefono] = useState("");
+  const [direccion, setDireccion] = useState("");
+  const [fecha, setFecha] = useState("");
+  const [servicio, setServicio] = useState("");
+
   const [Mensajes, setMensajes] = useState([
     { 
       sender: 'bot', 
@@ -24,10 +33,12 @@ export default function ChatBot() {
 
   const handleSelect = (ValorOpc) => {
     const currentQ = Preguntas[Index];
-    const OpcionSelec = currentQ.options.find(opc => opc.value === ValorOpc);
+    const OpcionSelec = currentQ.options?.find(opc => opc.value === ValorOpc);
 
     setRespuestas(anterior => ({ ...anterior, [Index]: ValorOpc }));
-    setMensajes(anterior => [...anterior, { sender: 'user', text: OpcionSelec.label }]);
+    if (OpcionSelec) {
+      setMensajes(anterior => [...anterior, { sender: 'user', text: OpcionSelec.label }]);
+    }
 
     if (Index < Preguntas.length - 1) {
       const SigIndex = Index + 1;
@@ -46,43 +57,56 @@ export default function ChatBot() {
       setTimeout(() => {
         setMensajes(anterior => [...anterior, {
           sender: 'bot',
-          text: '✅ ¡Perfecto! Has respondido todas las preguntas. Haz clic abajo para guardar tus respuestas.',
-          titulo: 'Finalizado' // ← Nuevo
+          text: '✅ ¡Perfecto! Has respondido todas las preguntas. Ahora llena tus datos para agendar la cita.',
+          titulo: 'Finalizado'
         }]);
       }, 800);
     }
   };
 
-
   const GuardarBD = async () => {
-  const IdRandom = Math.floor(1000 + Math.random() * 9000);
-  
-  const NuevoDato = {
-    id: IdRandom,
-    answers: Respuestas
-  };
+    const NuevoDato = {
+      nombreCliente,
+      tipoDocumento,
+      documento,
+      telefono,
+      direccion,
+      fecha,
+      servicio,
+      answers: Respuestas
+    };
 
-  try {
-    const respuesta = await fetch('http://localhost:3001/respuestas', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(NuevoDato)
-    });
+    // 🔎 Aquí ves exactamente qué JSON se envía
+    console.log("NuevoDato enviado al backend:", NuevoDato);
 
-    if (respuesta.ok) {
+    try {
+      const API_URL = import.meta.env.VITE_API_URL;
+      const respuesta = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(NuevoDato)
+      });
+
+      if (respuesta.ok) {
+        const data = await respuesta.json();
+        setMensajes(anterior => [...anterior, {
+          sender: 'bot',
+          text: `✅ ${data.mensaje}`
+        }]);
+      } else {
+        setMensajes(anterior => [...anterior, {
+          sender: 'bot',
+          text: '❌ Error al guardar en BD'
+        }]);
+      }
+    } catch (error) {
+      console.error('Error:', error);
       setMensajes(anterior => [...anterior, {
         sender: 'bot',
-        text: `✅ Guardado con ID #${IdRandom}`
+        text: '❌ Error al conectar con el backend'
       }]);
     }
-  } catch (error) {
-    console.error('Error:', error);
-    setMensajes(anterior => [...anterior, {
-      sender: 'bot',
-      text: '❌ Error al guardar'
-    }]);
-  }
-};
+  };
 
   return (
     <div className="chat-container">
@@ -114,7 +138,6 @@ export default function ChatBot() {
                     <span className={`icon-circle ${ColoresIconos[optIdx % ColoresIconos.length]}`}>
                       {opt.label.charAt(0)}
                     </span>
-
                     <span className="option-label">{opt.label}</span>
                   </button>
                 ))}
@@ -126,6 +149,20 @@ export default function ChatBot() {
 
       {Terminado && (
         <div className="chat-footer">
+          <h3>Datos del cliente</h3>
+          <input type="text" placeholder="Nombre del cliente" value={nombreCliente} onChange={e => setNombreCliente(e.target.value)} />
+          <input type="text" placeholder="Tipo de documento (CC, TI, Pasaporte)" value={tipoDocumento} onChange={e => setTipoDocumento(e.target.value)} />
+          <input type="text" placeholder="Número de documento" value={documento} onChange={e => setDocumento(e.target.value)} />
+          <input type="text" placeholder="Teléfono" value={telefono} onChange={e => setTelefono(e.target.value)} />
+          <input type="text" placeholder="Dirección" value={direccion} onChange={e => setDireccion(e.target.value)} />
+          <input type="date" value={fecha} onChange={e => setFecha(e.target.value)} />
+          <select value={servicio} onChange={e => setServicio(e.target.value)}>
+            <option value="">Seleccione servicio</option>
+            <option value="Instalación">Instalación</option>
+            <option value="Mantenimiento">Mantenimiento</option>
+            <option value="Reparación">Reparación</option>
+          </select>
+
           <button onClick={GuardarBD} className="save-btn">
             💾 Guardar respuestas en BD
           </button>

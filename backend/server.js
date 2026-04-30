@@ -5,9 +5,15 @@ const conectarDB = require("./config/database");
 
 const app = express();
 
-app.use(cors());
-app.use(express.json());
+app.use(cors({
+    origin: "http://localhost:5173"
+}));
 
+app.use(express.json());
+app.use((req, res, next) => {
+    console.log(`${req.method} ${req.url}`);
+    next();
+});
 // Coneccion  a la base de datos
 conectarDB();
 
@@ -16,6 +22,8 @@ app.use("/api/citas", require("./routes/citasRoutes"));
 console.log("Rutas registradas: /api/citas");
 
 
-app.listen(3000, () => {
-    console.log("Servidor backend corriendo en puerto 3000");
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Servidor backend corriendo en puerto ${PORT}`);
 });
+

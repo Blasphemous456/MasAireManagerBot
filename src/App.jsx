@@ -1,10 +1,7 @@
-import ChatBot from './Componentes/ChatBot';
+import ChatBot from './componentes/ChatBot';
 
 function App() {
-  return (
-    <div style={{ padding: '2rem' }}>
-      <ChatBot />
-    </div>
-  );
+  return <ChatBot />;
 }
+
 export default App;

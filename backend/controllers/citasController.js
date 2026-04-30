@@ -2,27 +2,23 @@ const { generarHorarioIA } = require("../services/iaService");
 const Cita = require("../models/Cita");
 
 // Crear nueva cita
-async function agendarCita(req, res) {
+async function crearCita(req, res) {
+    console.log("Body recibido:", req.body);
     try {
-        const { nombreCliente, tipoDocumento, documento, telefono, direccion, fecha, servicio } = req.body;
+        // cuerpo recibido desde el frontend
+        const datos = req.body;
 
-        // Obtener citas existentes desde Mongo
+        // Obtiene las citas existentes desde Mongo
         const citas = await Cita.find();
 
-        // Generar horario con el servicio IA
+        // Generar el horario
         const horario = generarHorarioIA(citas);
 
-        // Crear nueva cita 
+        // Crear nueva cita con los datos recibidos
         const nuevaCita = new Cita({
-            nombreCliente,
-            tipoDocumento,
-            documento,
-            telefono,
-            direccion,
-            fecha: horario || fecha,
-            servicio
+            ...datos,
+            fecha: horario || datos.fecha // usa el horario generado o la fecha enviada
         });
-
 
         const citaGuardada = await nuevaCita.save();
 
@@ -31,6 +27,7 @@ async function agendarCita(req, res) {
             cita: citaGuardada
         });
     } catch (error) {
+        console.error("Error al guardar cita:", error);
         res.status(500).json({ error: error.message });
     }
 }
@@ -45,7 +42,5 @@ async function obtenerCitas(req, res) {
     }
 }
 
-module.exports = {
-    agendarCita,
-    obtenerCitas
-};
+module.exports = { crearCita, obtenerCitas };
+

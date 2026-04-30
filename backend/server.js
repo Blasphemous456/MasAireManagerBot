@@ -5,8 +5,8 @@ const conectarDB = require("./config/database");
 
 const app = express();
 
-app.use(cors({
-    origin: "http://localhost:5173"
+app.use(cors({ 
+    origin: ["http://localhost:5173", "http://127.0.0.1:5173"] 
 }));
 
 app.use(express.json());
@@ -14,7 +14,7 @@ app.use((req, res, next) => {
     console.log(`${req.method} ${req.url}`);
     next();
 });
-// Coneccion  a la base de datos
+// Conexion  a la base de datos
 conectarDB();
 
 // Registro de las rutas

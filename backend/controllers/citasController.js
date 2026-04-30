@@ -14,7 +14,7 @@ async function crearCita(req, res) {
         // Generar el horario
         const horario = generarHorarioIA(citas);
 
-        // Crear nueva cita con los datos recibidos
+        // Crea una nueva cita con los datos recibidos
         const nuevaCita = new Cita({
             ...datos,
             fecha: horario || datos.fecha // usa el horario generado o la fecha enviada

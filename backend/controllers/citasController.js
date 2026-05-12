@@ -1,7 +1,7 @@
 const { generarHorarioIA } = require("../services/iaService");
 const Cita = require("../models/Cita");
 
-// Crear nueva cita
+// Crea nueva cita
 async function crearCita(req, res) {
     console.log("Body recibido:", req.body);
     try {

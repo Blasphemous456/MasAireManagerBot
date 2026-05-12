@@ -1,6 +1,5 @@
 function generarHorarioIA(citas) {
     
-
     let hora = 8;
 
     if (citas.length > 0) {

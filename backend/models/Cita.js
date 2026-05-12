@@ -9,7 +9,7 @@ const citaSchema = new mongoose.Schema(
         direccion: { type: String, required: true },
         fecha: { type: String, required: true },
         servicio: { type: String, required: true },
-        answers: { type: Object, required: false } // guarda las respuestas del chatbot 
+        answers: { type: Object, required: false } 
     },
     { timestamps: true }
 );

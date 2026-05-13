@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Preguntas } from '../Data/Preguntas';
 import '../Estilos/ChatBot.css';
 
-export default function ChatBot() {
+export default function ChatBotInst() {
   const [Index, setIndex] = useState(0);
   const [Respuestas, setRespuestas] = useState({});
   const [Terminado, setTerminado] = useState(false);
@@ -46,15 +46,15 @@ export default function ChatBot() {
       setMensajes(anterior => [...anterior, { sender: 'user', text: OpcionSelec.label }]);
     }
 
-    if (Index < Preguntas.length - 1) {
+    if (Index < PreguntasInstalacion.length - 1) {
       const SigIndex = Index + 1;
       setIndex(SigIndex);
       setTimeout(() => {
         setMensajes(anterior => [...anterior, {
           sender: 'bot',
-          text: Preguntas[SigIndex].text,
-          options: Preguntas[SigIndex].options,
-          titulo: `Paso ${SigIndex + 1} de ${Preguntas.length}`
+          text: PreguntasInstalacion[SigIndex].text,
+          options: PreguntasInstalacion[SigIndex].options,
+          titulo: `Paso ${SigIndex + 1} de ${PreguntasInstalacion.length}`
         }]);
       }, 800);
     } else {
@@ -209,3 +209,4 @@ export default function ChatBot() {
     </div>
   );
 }
+

@@ -1,0 +1,189 @@
+/* Contenedor principal */
+.app-container {
+  min-height: 100vh;
+  background: #f9f9f9;
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+.menu-principal {
+  max-width: 450px;
+  margin: 0 auto;
+  background: white;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 0 20px rgba(0,0,0,0.1);
+}
+
+.chat-header {
+  background: white;
+  padding: 15px 20px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+}
+
+.logo-text {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.logo-text .orange {
+  color: #f39c12;
+}
+
+.logo-text .green {
+  color: #00695c;
+}
+
+.title-bar {
+  background-color: #d1d8dd;
+  color: #455a64;
+  padding: 12px 20px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.menu-content {
+  flex: 1;
+  padding: 20px;
+  background: #f9f9f9;
+}
+
+.servicios-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.servicio-card {
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 30px;
+  padding: 20px 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.servicio-card:hover {
+  background: #f4f6f7;
+  border-color: #a5d6a7;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.icon-circle {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.icon-circle.orange {
+  background-color: #f39c12;
+}
+
+.icon-circle.dark-green {
+  background-color: #00695c;
+}
+
+.icon-circle.light-green {
+  background-color: #8bc34a;
+}
+
+.card-title {
+  margin: 0;
+  font-size: 1.3rem;
+  color: #2c3e50;
+  font-weight: 600;
+  flex: 1;
+}
+
+.card-arrow {
+  font-size: 1.5rem;
+  color: #00695c;
+  font-weight: bold;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.servicio-card:hover .card-arrow {
+  opacity: 1;
+}
+
+.footer {
+  padding: 15px 20px;
+  background: #d1d8dd;
+  text-align: center;
+  color: #455a64;
+  font-size: 0.85rem;
+  border-top: 1px solid #b0bec5;
+}
+
+.footer p {
+  margin: 0;
+}
+
+.chatbot-wrapper {
+  position: relative;
+  min-height: 100vh;
+}
+
+.btn-volver {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  padding: 10px 20px;
+  background: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  z-index: 1000;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+  transition: all 0.3s;
+}
+
+.btn-volver:hover {
+  background: #c0392b;
+  transform: translateX(-3px);
+}
+
+@media (max-width: 768px) {
+  .menu-principal {
+    max-width: 100%;
+  }
+  
+  .servicio-card {
+    padding: 18px 20px;
+  }
+  
+  .icon-circle {
+    width: 45px;
+    height: 45px;
+    font-size: 1.3rem;
+  }
+  
+  .card-title {
+    font-size: 1.2rem;
+  }
+  
+  .btn-volver {
+    top: 10px;
+    left: 10px;
+    padding: 8px 16px;
+    font-size: 0.85rem;
+  }
+}

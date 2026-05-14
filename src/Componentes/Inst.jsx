@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Preguntas } from '../Data/Preguntas';
+import { PreguntasInstalacion } from '../Data/Preg_Inst';
 import '../Estilos/ChatBot.css';
 
 export default function ChatBotInst() {
@@ -31,14 +31,14 @@ export default function ChatBotInst() {
     },
     {
       sender: 'bot',
-      text: Preguntas[0].text,
-      options: Preguntas[0].options,
-      titulo: `Paso 1 de ${Preguntas.length}`
+      text: PreguntasInstalacion[0].text,
+      options: PreguntasInstalacion[0].options,
+      titulo: `Paso 1 de ${PreguntasInstalacion.length}`
     }
   ]);
 
   const handleSelect = (ValorOpc) => {
-    const currentQ = Preguntas[Index];
+    const currentQ = PreguntasInstalacion[Index];
     const OpcionSelec = currentQ.options?.find(opc => opc.value === ValorOpc);
 
     setRespuestas(anterior => ({ ...anterior, [Index]: ValorOpc }));

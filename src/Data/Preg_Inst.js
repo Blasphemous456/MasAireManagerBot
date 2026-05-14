@@ -1,4 +1,6 @@
-export const PreguntasInstalacion = [
+export const PreguntasInstalacion
+= [
+  
   {
     id: 1,
     text: "¿Cual es el tamaño de la habitación donde desea instalar el aire acondicionado?",

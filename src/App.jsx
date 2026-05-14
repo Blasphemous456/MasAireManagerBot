@@ -2,6 +2,7 @@ import { useState } from 'react';
 import ChatBotInstalacion from './Componentes/Inst';
 import ChatBotMantenimiento from './Componentes/Mant';
 import ChatBotReparacion from './Componentes/Repa';
+import ConsultarCita from './Componentes/ConsultarCita'; 
 import './App.css';
 
 function App() {
@@ -15,6 +16,8 @@ function App() {
         return <ChatBotMantenimiento onVolver={() => setServicioActivo(null)} />;
       case 'reparacion':
         return <ChatBotReparacion onVolver={() => setServicioActivo(null)} />;
+      case 'consulta': // 2. Caso para gestionar citas
+        return <ConsultarCita onVolver={() => setServicioActivo(null)} />;
       default:
         return null;
     }
@@ -32,39 +35,53 @@ function App() {
           </div>
 
           <div className="title-bar">
-            ¿Qué deseas hacer?
+            ¿Qué deseas hacer hoy?
           </div>
 
           <div className="menu-content">
             <div className="servicios-container">
               
-              {/* Instalación */}
+              {/* Opción: Instalación */}
               <div 
                 className="servicio-card"
                 onClick={() => setServicioActivo('instalacion')}
               >
                 <span className="icon-circle orange">🛠️</span>
-                <h3 className="card-title">Instalación</h3>
+                <h3 className="card-title">Agendar Instalación</h3>
                 <div className="card-arrow">→</div>
               </div>
 
-              {/* Mantenimiento */}
+              {/* Opción: Mantenimiento */}
               <div 
                 className="servicio-card"
                 onClick={() => setServicioActivo('mantenimiento')}
               >
                 <span className="icon-circle dark-green">🔧</span>
-                <h3 className="card-title">Mantenimiento</h3>
+                <h3 className="card-title">Agendar Mantenimiento</h3>
                 <div className="card-arrow">→</div>
               </div>
 
-              {/* Reparación */}
+              {/* Opción: Reparación */}
               <div 
                 className="servicio-card"
                 onClick={() => setServicioActivo('reparacion')}
               >
                 <span className="icon-circle light-green">🔩</span>
-                <h3 className="card-title">Reparación</h3>
+                <h3 className="card-title">Agendar Reparación</h3>
+                <div className="card-arrow">→</div>
+              </div>
+
+              {/* 3. NUEVA OPCIÓN: Gestionar / Consultar Citas */}
+              <div 
+                className="servicio-card consulta-card" 
+                style={{borderTop: '2px dashed #ccc', marginTop: '10px'}}
+                onClick={() => setServicioActivo('consulta')}
+              >
+                <span className="icon-circle blue">🔍</span>
+                <h3 className="card-title">Gestionar mis Citas</h3>
+                <p style={{fontSize: '0.7rem', color: '#666', position: 'absolute', bottom: '10px', left: '65px'}}>
+                  Ver, modificar o cancelar
+                </p>
                 <div className="card-arrow">→</div>
               </div>
 
@@ -78,7 +95,7 @@ function App() {
       ) : (
         <div className="chatbot-wrapper">
           <button className="btn-volver" onClick={() => setServicioActivo(null)}>
-            ← Volver al menú
+            ← Volver al menú principal
           </button>
           {renderizarChatbot()}
         </div>

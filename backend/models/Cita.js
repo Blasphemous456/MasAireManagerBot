@@ -8,6 +8,7 @@ const citaSchema = new mongoose.Schema(
         telefono: { type: String, required: true },
         direccion: { type: String, required: true },
         fecha: { type: String, required: true },
+        hora: { type: String, required: true },
         servicio: { type: String, required: true },
         answers: { type: Object, required: false } 
     },

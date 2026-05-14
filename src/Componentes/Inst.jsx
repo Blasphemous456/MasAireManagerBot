@@ -6,45 +6,56 @@ export default function ChatBotInst() {
   const [Index, setIndex] = useState(0);
   const [Respuestas, setRespuestas] = useState({});
   const [Terminado, setTerminado] = useState(false);
+  const [AgendadoExitoso, setAgendadoExitoso] = useState(false);
+  const [RespuestaServidor, setRespuestaServidor] = useState(null);
+
+  const [Mensajes, setMensajes] = useState([
+    { sender: 'bot', text: '👋 ¡Hola! Iniciemos con tu proceso de instalación.', titulo: '¿Qué deseas Realizar?' },
+    { sender: 'bot', text: PreguntasInstalacion[0].text, options: PreguntasInstalacion[0].options, titulo: `Paso 1 de ${PreguntasInstalacion.length}` }
+  ]);
+
   const ColoresIconos = ['orange', 'dark-green', 'light-green', 'blue'];
 
-  // Estados para los datos del cliente
+  // Estados del cliente
   const [nombreCliente, setNombreCliente] = useState("");
   const [tipoDocumento, setTipoDocumento] = useState("");
   const [documento, setDocumento] = useState("");
   const [telefono, setTelefono] = useState("");
   const [fecha, setFecha] = useState("");
-  const [servicio, setServicio] = useState("");
+  const [hora, setHora] = useState("");
 
-  // Estados para la Dirección Estándar de Colombia
-  const [tipoVia, setTipoVia] = useState("");         
-  const [numeroVia, setNumeroVia] = useState("");     
-  const [orientacion, setOrientacion] = useState(""); 
-  const [placaNumero, setPlacaNumero] = useState(""); 
-  const [complemento, setComplemento] = useState(""); 
+  // Estados dirección
+  const [tipoVia, setTipoVia] = useState("");
+  const [numeroVia, setNumeroVia] = useState("");
+  const [orientacion, setOrientacion] = useState("");
+  const [placaNumero, setPlacaNumero] = useState("");
+  const [complemento, setComplemento] = useState("");
 
-  const [Mensajes, setMensajes] = useState([
-    {
-      sender: 'bot',
-      text: '👋 ¡Hola! Te haré 3 preguntas sobre tu instalación. Selecciona una opción por cada una.',
-      titulo: '¿Qué deseas hacer?'
-    },
-    {
-      sender: 'bot',
-      text: PreguntasInstalacion[0].text,
-      options: PreguntasInstalacion[0].options,
-      titulo: `Paso 1 de ${PreguntasInstalacion.length}`
+  // --- GENERADOR DE HORARIOS  ---
+  const generarHorarios = () => {
+    const horarios = [];
+    for (let h = 7; h <= 17; h++) {
+      const period = h >= 12 ? "PM" : "AM";
+      const displayH = h > 12 ? h - 12 : h === 0 ? 12 : h;
+      horarios.push({ value: `${h.toString().padStart(2, '0')}:00`, label: `${displayH}:00 ${period}` });
+      if (h < 17) {
+        horarios.push({ value: `${h.toString().padStart(2, '0')}:30`, label: `${displayH}:30 ${period}` });
+      }
     }
-  ]);
+    return horarios;
+  };
+
+  // --- LÓGICA DE BOTÓN  ---
+  const formularioCompleto =
+    nombreCliente.trim() !== "" && tipoDocumento !== "" && documento.trim() !== "" &&
+    telefono.trim() !== "" && tipoVia !== "" && numeroVia.trim() !== "" &&
+    orientacion !== "" && placaNumero.trim() !== "" && fecha !== "" && hora !== "";
 
   const handleSelect = (ValorOpc) => {
     const currentQ = PreguntasInstalacion[Index];
     const OpcionSelec = currentQ.options?.find(opc => opc.value === ValorOpc);
-
     setRespuestas(anterior => ({ ...anterior, [Index]: ValorOpc }));
-    if (OpcionSelec) {
-      setMensajes(anterior => [...anterior, { sender: 'user', text: OpcionSelec.label }]);
-    }
+    setMensajes(anterior => [...anterior, { sender: 'user', text: OpcionSelec.label }]);
 
     if (Index < PreguntasInstalacion.length - 1) {
       const SigIndex = Index + 1;
@@ -56,35 +67,20 @@ export default function ChatBotInst() {
           options: PreguntasInstalacion[SigIndex].options,
           titulo: `Paso ${SigIndex + 1} de ${PreguntasInstalacion.length}`
         }]);
-      }, 800);
+      }, 600);
     } else {
-      setTerminado(true);
-      setTimeout(() => {
-        setMensajes(anterior => [...anterior, {
-          sender: 'bot',
-          text: '✅ ¡Perfecto! Has respondido todas las preguntas. Ahora llena tus datos para agendar la cita.',
-          titulo: 'Finalizado'
-        }]);
-      }, 800);
+      setTimeout(() => setTerminado(true), 600);
     }
   };
 
   const GuardarBD = async () => {
-    // Uso obligatorio de backticks (`) para evitar el [PARSE_ERROR]
     const direccionCompleta = `${tipoVia} ${numeroVia} # ${orientacion} - ${placaNumero} ${complemento}`.trim();
-
     const NuevoDato = {
-      nombreCliente,
-      tipoDocumento,
-      documento,
-      telefono,
-      direccion: direccionCompleta,
-      fecha,
-      servicio,
+      nombreCliente, tipoDocumento, documento, telefono,
+      direccion: direccionCompleta, fecha, hora,
+      servicio: "Instalación",
       answers: Respuestas
     };
-
-    console.log("NuevoDato enviado al backend:", NuevoDato);
 
     try {
       const API_URL = import.meta.env.VITE_API_URL;
@@ -93,45 +89,38 @@ export default function ChatBotInst() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(NuevoDato)
       });
-
+      const data = await respuesta.json();
       if (respuesta.ok) {
-        const data = await respuesta.json();
-        setMensajes(anterior => [...anterior, { sender: 'bot', text: `✅ ${data.mensaje}` }]);
+        setRespuestaServidor(data);
+        setAgendadoExitoso(true);
       } else {
-        setMensajes(anterior => [...anterior, { sender: 'bot', text: '❌ Error al guardar en BD' }]);
+        alert(data.mensaje);
       }
     } catch (error) {
-      console.error('Error:', error);
-      setMensajes(anterior => [...anterior, { sender: 'bot', text: '❌ Error al conectar con el backend' }]);
+      alert("❌ Error de conexión");
     }
   };
 
   return (
     <div className="chat-container">
       <div className="chat-header">
-        <span className="logo-text"><span className="orange">más</span><span className="green">aire</span> manager bot</span>
+        <span className="logo-text"><span className="orange">más</span><span className="green">aire</span> manager</span>
       </div>
 
       <div className="title-bar">
-        {Mensajes[Mensajes.length - 1]?.titulo || "Instalación"}
+        {AgendadoExitoso ? "Confirmación" : "Agenda tu Servicio"}
       </div>
 
       <div className="chat-messages">
-        {Mensajes.map((msg, idx) => (
+        {/* MAP CORREGIDO (Línea 111 a 125) */}
+        {!AgendadoExitoso && Mensajes.map((msg, idx) => (
           <div key={idx} className={`message ${msg.sender}`}>
             <div className="bubble">{msg.text}</div>
-            {msg.sender === 'bot' && msg.options && (
+            {msg.sender === 'bot' && msg.options && !Terminado && (
               <div className="options">
                 {msg.options.map((opt, optIdx) => (
-                  <button
-                    key={opt.value}
-                    className="option-btn"
-                    onClick={() => handleSelect(opt.value)}
-                    disabled={Terminado}
-                  >
-                    <span className={`icon-circle ${ColoresIconos[optIdx % ColoresIconos.length]}`}>
-                      {opt.label.charAt(0)}
-                    </span>
+                  <button key={opt.value} className="option-btn" onClick={() => handleSelect(opt.value)}>
+                    <span className={`icon-circle ${ColoresIconos[optIdx % ColoresIconos.length]}`}>{opt.label.charAt(0)}</span>
                     <span className="option-label">{opt.label}</span>
                   </button>
                 ))}
@@ -139,74 +128,84 @@ export default function ChatBotInst() {
             )}
           </div>
         ))}
+
+        {AgendadoExitoso && (
+          <div className="success-confirmation">
+            <div className="success-icon">✅</div>
+            <h3>¡Agendamiento Exitoso!</h3>
+            <p>{RespuestaServidor.mensaje}</p>
+            <div className="ticket-info">
+              <strong>Código de servicio:</strong>
+              <span>{RespuestaServidor.customId}</span>
+            </div>
+            <button className="save-btn" onClick={() => window.location.reload()}>Finalizar</button>
+          </div>
+        )}
       </div>
 
-      {Terminado && (
+      {Terminado && !AgendadoExitoso && (
         <div className="chat-footer">
-          <h3>Datos del cliente</h3>
-          <input type="text" placeholder="Nombre del cliente" value={nombreCliente} onChange={e => setNombreCliente(e.target.value)} />
-          
-          <select value={tipoDocumento} onChange={e => setTipoDocumento(e.target.value)}>
-            <option value="">Seleccione tipo de documento</option>
-            <option value="CC">Cédula de Ciudadanía (CC)</option>
-            <option value="NIT">NIT (Empresas)</option>
-            <option value="Pasaporte">Pasaporte</option>
-            <option value="CE">Cédula de Extranjería (CE)</option>
-          </select>
-
-          <input type="text" placeholder="Número de documento" value={documento} onChange={e => setDocumento(e.target.value)} />
+          <input type="text" placeholder="Nombre completo" value={nombreCliente} onChange={e => setNombreCliente(e.target.value)} />
+          <div style={{ display: 'flex', gap: '5px' }}>
+            <select value={tipoDocumento} onChange={e => setTipoDocumento(e.target.value)} style={{ flex: 1 }}>
+              <option value="">Doc</option>
+              <option value="CC">CC</option>
+              <option value="NIT">NIT</option>
+              <option value="Pasaporte">Pasaporte</option>
+              <option value="CE">CE</option>
+            </select>
+            <input type="text" placeholder="Número" value={documento} onChange={e => setDocumento(e.target.value)} style={{ flex: 2 }} />
+          </div>
           <input type="text" placeholder="Teléfono" value={telefono} onChange={e => setTelefono(e.target.value)} />
 
-          {/* Dirección Estandarizada Colombia con Orientación */}
           <div className="address-container">
-            <label className="input-label">Dirección de la Cita</label>
             <div className="address-grid">
               <select value={tipoVia} onChange={e => setTipoVia(e.target.value)} className="address-select">
-                <option value="">Tipo</option>
-                <option value="Calle">Calle</option>
-                <option value="Carrera">Carrera</option>
-                <option value="Avenida">Avenida</option>
-                <option value="Diagonal">Diagonal</option>
-                <option value="Transversal">Transversal</option>
+                <option value="">Vía</option>
+                <option value="Calle">Cl.</option>
+                <option value="Carrera">Cr.</option>
+                <option value="Avenida">Av.</option>
+                <option value="Diagonal">Diag.</option>
               </select>
-              <input type="text" placeholder="N°" value={numeroVia} onChange={e => setNumeroVia(e.target.value)} style={{width: '50px'}} />
-              <span className="address-symbol">#</span>
+              <input type="text" placeholder="N°" value={numeroVia} onChange={e => setNumeroVia(e.target.value)} style={{ width: '40px' }} />
+              <span>#</span>
               <select value={orientacion} onChange={e => setOrientacion(e.target.value)} className="address-select">
-                <option value="">Orientación</option>
+                <option value="">Ori.</option>
                 <option value="Norte">Norte</option>
-                <option value="Sur">Sur</option>
+                <option value="Sur">Sur</option> 
                 <option value="Este">Este</option>
                 <option value="Oeste">Oeste</option>
-                <option value="Noroccidente">Noroccidente</option>
-                <option value="Suroccidente">Suroccidente</option>
-                <option value="Nororiente">Nororiente</option>
-                <option value="Suroriente">Suroriente</option>
+                <option value="Noroccidente">Nocc</option>
               </select>
-              <span className="address-symbol">-</span>
-              <input type="text" placeholder="N°" value={placaNumero} onChange={e => setPlacaNumero(e.target.value)} style={{width: '50px'}} />
+              <span>-</span>
+              <input type="text" placeholder="N°" value={placaNumero} onChange={e => setPlacaNumero(e.target.value)} style={{ width: '40px' }} />
             </div>
-            <input type="text" placeholder="Apto, Bloque o Barrio" value={complemento} onChange={e => setComplemento(e.target.value)} className="address-extra" />
+            <input type="text" placeholder="Apto / Barrio" value={complemento} onChange={e => setComplemento(e.target.value)} />
           </div>
 
-          {/* Fecha con Título y Calendario Nativo */}
-          <div className="input-group">
-            <label className="input-label">Indique la fecha de la cita deseada</label>
-            <input type="date" value={fecha} onChange={e => setFecha(e.target.value)} className="date-input" />
+          <div style={{ display: 'flex', gap: '10px' }}>
+            <div style={{ flex: 1 }}>
+              <label className="input-label">Fecha de la cita</label>
+              <input type="date" value={fecha} onChange={e => setFecha(e.target.value)} />
+            </div>
+            <div style={{ flex: 1 }}>
+              <label className="input-label">Horario deseado</label>
+              <select value={hora} onChange={e => setHora(e.target.value)}>
+                <option value="">Seleccione</option>
+                {generarHorarios().map(h => (
+                  <option key={h.value} value={h.value}>{h.label}</option>
+                ))}
+              </select>
+            </div>
           </div>
 
-          <select value={servicio} onChange={e => setServicio(e.target.value)}>
-            <option value="">Seleccione servicio</option>
-            <option value="Instalación">Instalación</option>
-            <option value="Mantenimiento">Mantenimiento</option>
-            <option value="Reparación">Reparación</option>
-          </select>
-
-          <button onClick={GuardarBD} className="save-btn">
-            💾 Guardar respuestas en BD
-          </button>
+          {formularioCompleto && (
+            <button onClick={GuardarBD} className="save-btn animated-button" style={{ marginTop: '15px', background: 'linear-gradient(135deg, #00695c 0%, #004d40 100%)' }}>
+              📅 CONFIRMAR CITA
+            </button>
+          )}
         </div>
       )}
     </div>
   );
 }
-

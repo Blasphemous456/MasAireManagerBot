@@ -24,7 +24,7 @@ export const PreguntasMantenimiento = [
     options: [
       { value: "a", label: "Atencion lo mas pronto posible " },
       { value: "b", label: "Programarlo en los proximos dias" },
-      { value: "c", label: "Estoy comparando opciones +" }
+      { value: "c", label: "Estoy comparando opciones " }
     ]
   }
 ];

@@ -15,7 +15,7 @@ export const PreguntasReparacion = [
     options: [
       { value: "a", label: "Aparecio recientemente " },
       { value: "b", label: "Ha estado ocurriendo de forma intermitente " },
-      { value: "c", label: "Lleva tiempo y ha empeorado " }
+      { value: "c", label: "Lleva tiempo y ha empeorado" }
     ]
   },
   {

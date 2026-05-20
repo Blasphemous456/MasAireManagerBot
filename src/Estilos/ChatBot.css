@@ -1,0 +1,330 @@
+.chat-container {
+  max-width: 450px;
+  margin: 1.5rem auto;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', Roboto, sans-serif;
+  display: flex;
+  flex-direction: column;
+  min-height: 600px;
+  height: auto;
+}
+
+.chat-header {
+  background: white;
+  padding: 15px 20px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+}
+
+.logo-text {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.logo-text .orange {
+  color: #f39c12;
+}
+
+.logo-text .green {
+  color: #00695c;
+}
+
+.title-bar {
+  background-color: #d1d8dd;
+  color: #455a64;
+  padding: 12px 20px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* MENSAJES Y BURBUJAS */
+.chat-messages {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  background-color: #f9f9f9;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.message {
+  display: flex;
+  flex-direction: column;
+}
+
+.message.bot {
+  align-items: flex-start;
+}
+
+.message.user {
+  align-items: flex-end;
+}
+
+.bubble {
+  padding: 12px 18px;
+  border-radius: 12px;
+  max-width: 85%;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.bot .bubble {
+  background: white;
+  color: #333;
+  border-top-left-radius: 2px;
+}
+
+.user .bubble {
+  background: #e8f5e9;
+  color: #2e7d32;
+  border-top-right-radius: 2px;
+}
+
+/* OPCIONES DEL CHATBOT */
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  margin-top: 8px;
+}
+
+.option-btn {
+  display: flex;
+  align-items: center;
+  background: #f4f6f7;
+  border: 1px solid #e0e0e0;
+  padding: 12px 15px;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
+  font-size: 0.95rem;
+}
+
+.option-btn:hover:not(:disabled) {
+  background: #e8f5e9;
+  border-color: #a5d6a7;
+}
+
+.icon-circle {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 15px;
+  font-weight: bold;
+  color: white;
+  flex-shrink: 0;
+}
+
+.icon-circle.orange {
+  background-color: #f39c12;
+}
+
+.icon-circle.dark-green {
+  background-color: #00695c;
+}
+
+.icon-circle.light-green {
+  background-color: #8bc34a;
+}
+
+.icon-circle.blue {
+  background-color: #29b6f6;
+}
+
+/* FORMULARIOS */
+.chat-footer,
+.form-view {
+  padding: 15px 20px;
+  background: white;
+  border-top: 1px solid #eee;
+}
+
+input,
+select {
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+
+.save-btn {
+  background: #00695c;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 25px;
+  font-weight: bold;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 10px;
+}
+
+/* DIRECCIÓN ESTÁNDAR COLOMBIA */
+.address-container {
+  background: #f1f8e9;
+  padding: 10px;
+  border-radius: 10px;
+  margin: 10px 0;
+}
+
+.address-grid {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 5px;
+}
+
+.address-select {
+  width: 80px;
+  padding: 5px;
+}
+
+.address-symbol {
+  font-weight: bold;
+  color: #00695c;
+}
+
+.input-label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #555;
+  margin-top: 10px;
+}
+
+/* PORTAL DE GESTIÓN DE CITAS */
+.error-bubble {
+  background: #ffebee;
+  color: #c62828;
+  padding: 12px;
+  border-radius: 8px;
+  margin-top: 10px;
+  font-size: 0.85rem;
+  text-align: center;
+  border: 1px solid #ffcdd2;
+}
+
+.appointment-card {
+  background: white;
+  border-left: 5px solid #00695c;
+  padding: 15px;
+  border-radius: 8px;
+  margin-top: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.service-badge {
+  background: #e0f2f1;
+  color: #00695c;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.7rem;
+  font-weight: bold;
+}
+
+.choice-buttons {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.btn-choice-view {
+  background: #f1f1f1;
+  color: #333;
+  border: 1px solid #ccc;
+  padding: 8px;
+  border-radius: 6px;
+  flex: 1;
+  cursor: pointer;
+}
+
+.btn-choice-edit {
+  background: #f39c12;
+  color: white;
+  border: none;
+  padding: 8px;
+  border-radius: 6px;
+  flex: 1;
+  cursor: pointer;
+}
+
+.btn-delete {
+  background: #e74c3c;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.cancel-btn-red {
+  background: #c0392b;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  width: 100%;
+  margin-top: 15px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.answers-box {
+  background: #eee;
+  padding: 10px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  margin: 10px 0;
+  max-height: 100px;
+  overflow-y: auto;
+}
+
+.back-btn {
+  background: #78909c;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 8px;
+  width: 100%;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+.animated-button {
+    animation: slideUp 0.4s ease-out;
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.instruction-text {
+    font-size: 0.8rem;
+    color: #888;
+    text-align: center;
+    margin-bottom: 10px;
+    font-style: italic;
+}

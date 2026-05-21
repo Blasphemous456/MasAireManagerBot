@@ -113,7 +113,7 @@ async function actualizarCita(req, res) {
     }
 }
 
-// ELIMINAR CITA (DELETE)
+// ELIMINAR CITA 
 async function eliminarCita(req, res) {
     const { id } = req.params;
     try {
